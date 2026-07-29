@@ -1,10 +1,12 @@
 import { Hero } from "@/components/sections/Hero";
 import { Experience } from "@/components/sections/Experience";
 import { Projects } from "@/components/sections/Projects";
+import { TechStack } from "@/components/sections/TechStack";
+import { Footer } from "@/components/layout/Footer";
 import { fetchGithubProjects } from "@/lib/github";
 
 export const dynamic = 'force-static';
-export const revalidate = 3600; // Opsiyonel: Veriyi her saat başı arka planda yenile (ISR)
+export const revalidate = 3600;
 
 
 export default async function Home() {
@@ -15,6 +17,8 @@ export default async function Home() {
       <Hero />
       <Experience />
       <Projects projects={githubProjects} />
+      <TechStack />
+      <Footer />
     </div>
   );
 }

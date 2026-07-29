@@ -3,11 +3,13 @@ export const PORTFOLIO_DATA = {
         name: "Özay Can Kırlı",
         role: "Software Engineer & Architect",
         email: "ozaycank97@gmail.com",
-        location: "Salihli, Manisa, Turkey (Hybrid/Remote)",
+        location: "Salihli, Manisa, Turkey (On-Site/Hybrid/Remote)",
         objective: "Building scalable full-stack solutions and modern frontend architectures in dynamic environments.",
         links: {
             github: "https://github.com/ozaycank",
             linkedin: "https://linkedin.com/in/ozaycankirli",
+            email: "ozaycank97@gmail.com",
+            instagram: "https://instagram.com/ozaycankrl",
         },
     },
     skills: {

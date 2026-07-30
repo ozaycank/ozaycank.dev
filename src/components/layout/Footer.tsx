@@ -14,7 +14,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-12">
           <div>
             <Link href="/" className="font-semibold text-xl tracking-tight">
-              özaycank<span className="text-neutral-500">.dev</span>
+              ozaycank<span className="text-neutral-500">.dev</span>
             </Link>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2 max-w-md">
               {PORTFOLIO_DATA.personal.objective}

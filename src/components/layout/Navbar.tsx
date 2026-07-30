@@ -12,7 +12,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-950/50 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-8">
         <Link href="/" className="font-semibold text-lg tracking-tight hover:opacity-80 transition-opacity">
-          özaycank<span className="text-neutral-500">.dev</span>
+          ozaycank<span className="text-neutral-500">.dev</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-600 dark:text-neutral-400">

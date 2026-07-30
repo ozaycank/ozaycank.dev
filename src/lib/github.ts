@@ -1,4 +1,3 @@
-// src/lib/github.ts
 import { Octokit } from "@octokit/rest";
 
 const octokit = new Octokit({
@@ -6,6 +5,19 @@ const octokit = new Octokit({
 });
 
 const USERNAME = process.env.GITHUB_USERNAME || 'ozaycank';
+
+interface GithubRepoResponse {
+    id: number;
+    name: string;
+    full_name: string;
+    description: string | null;
+    html_url: string;
+    homepage: string | null;
+    stargazers_count: number;
+    topics?: string[];
+    created_at: string | null;
+    fork: boolean;
+}
 
 export interface GithubProject {
     id: number;
@@ -20,18 +32,17 @@ export interface GithubProject {
     createdAt: string;
 }
 
-// GÖSTERİLMESİNİ İSTEDİĞİN ESKİ (Spesifik) REPOLAR
-const ALLOWED_OLD_REPOS = [
+// SADECE GÖRÜNMESİNİ İSTEDİĞİN 5 ÖZEL REPO
+const ALLOWED_OLD_REPOS: readonly string[] = [
     "Velyo",
     "ogretmen-busra",
     "fanX",
     "ozaycank.dev",
-    "pomodoro"
+    "pomodoro",
 ];
 
-// BU TARİHTEN SONRA OLUŞTURULAN TÜM YENİ REPOLARI OTOMATİK KABUL ET
-// (Tarihi bugünün veya projeyi oluşturmaya başladığın bir tarih yapabilirsin)
-const AUTO_ACCEPT_DATE = new Date("2024-01-01T00:00:00Z");
+// BUGÜNDEN (29 Temmuz 2026) SONRA AÇILAN YENİ REPOLAR OTOMATİK EKLENİR
+const AUTO_ACCEPT_DATE = new Date("2026-07-29T00:00:00Z");
 
 function extractFirstImage(markdownContent: string | null, repoFullName: string): string | null {
     if (!markdownContent) return null;
@@ -64,22 +75,19 @@ export async function fetchGithubProjects(): Promise<GithubProject[]> {
             username: USERNAME,
             sort: "updated",
             per_page: 100,
-            type: "owner"
+            type: "owner",
         });
 
-        // AKILLI FİLTRELEME BURADA YAPILIYOR
-        const filteredRepos = repos.filter((repo: any) => {
-            if (repo.fork) return false; // Forkları her zaman gizle
+        // Filtre: Sadece 5 beyaz listeli repo VEYA bugünden sonra oluşturulanlar
+        const filteredRepos = (repos as GithubRepoResponse[]).filter((repo) => {
+            if (repo.fork) return false;
 
-            const repoDate = new Date(repo.created_at);
-
-            // Eğer repo ALLOWED listesindeyse VEYA Auto-Accept tarihinden yeniyse GÖSTER
+            const repoDate = repo.created_at ? new Date(repo.created_at) : new Date(0);
             return ALLOWED_OLD_REPOS.includes(repo.name) || repoDate > AUTO_ACCEPT_DATE;
         });
 
-        const projectPromises = filteredRepos.map(async (repo: any) => {
+        const projectPromises = filteredRepos.map(async (repo) => {
             let coverImage: string | null = null;
-            let readmeContent: string | null = null;
 
             try {
                 const { data: readme } = await octokit.repos.getReadme({
@@ -90,11 +98,10 @@ export async function fetchGithubProjects(): Promise<GithubProject[]> {
                     },
                 });
 
-                readmeContent = readme as unknown as string;
+                const readmeContent = readme as unknown as string;
                 coverImage = extractFirstImage(readmeContent, repo.full_name);
-
-            } catch (readmeError) {
-                // Readme yoksa atla
+            } catch {
+                // README bulunamazsa sessizce geç
             }
 
             return {
@@ -111,12 +118,7 @@ export async function fetchGithubProjects(): Promise<GithubProject[]> {
             };
         });
 
-        const projects = await Promise.all(projectPromises);
-
-        // Repoları oluşturulma tarihine göre yeniden eskiye (veya güncellenme tarihine göre) sıralayabilirsin.
-        // Şu an varsayılan olarak "updated" (son güncellenene) göre geliyor.
-        return projects;
-
+        return await Promise.all(projectPromises);
     } catch (error) {
         console.error("Error fetching GitHub projects:", error);
         return [];

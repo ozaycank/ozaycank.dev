@@ -2,6 +2,7 @@ import { Hero } from "@/components/sections/Hero";
 import { Experience } from "@/components/sections/Experience";
 import { Projects } from "@/components/sections/Projects";
 import { TechStack } from "@/components/sections/TechStack";
+import { Blog } from "@/components/sections/Blog";
 import { Footer } from "@/components/layout/Footer";
 import { fetchGithubProjects } from "@/lib/github";
 
@@ -18,6 +19,7 @@ export default async function Home() {
       <Experience />
       <Projects projects={githubProjects} />
       <TechStack />
+      <Blog />
       <Footer />
     </div>
   );

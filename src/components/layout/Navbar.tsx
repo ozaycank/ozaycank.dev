@@ -16,7 +16,7 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-600 dark:text-neutral-400">
-          {['Experience', 'Projects', 'Tech Stack'].map((item) => (
+          {['Experience', 'Projects', 'Tech Stack', 'Blog'].map((item) => (
             <Link key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors">
               {item}
             </Link>
@@ -38,6 +38,7 @@ export function Navbar() {
             whileTap={{ scale: 0.95 }}
             href="/resume.pdf"
             target="_blank"
+            rel="noopener noreferrer"
             className="hidden md:flex items-center gap-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
           >
             <Download className="h-4 w-4" />

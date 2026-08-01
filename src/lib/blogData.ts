@@ -5,10 +5,9 @@ export interface BlogPost {
     date: string;
     readTime: string;
     claps: number;
-    commentsCount: number;
     tags: string[];
     coverImage?: string;
-    content: string[]; // Paragraf paragraf zengin metin akışı
+    content: string[];
 }
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -18,10 +17,9 @@ export const BLOG_POSTS: BlogPost[] = [
         subtitle: "Web development is not dead. But the easy version of it probably is.",
         date: "Jun 3, 2026",
         readTime: "5 min read",
-        claps: 283,
-        commentsCount: 16,
+        claps: 0,
         tags: ["Web Development", "Career", "AI", "Software Engineering"],
-        coverImage: "/images/profile.png", // Yazı için özel kapak resmi eklenebilir
+        coverImage: "/images/profile.png",
         content: [
             "So 2026 is basically here now, and honestly, a lot of people in tech look confused.",
             "Some people are wondering if their current job will even exist in the next few years. Others are jumping from one AI trend to another trying to figure out what skill is “safe.” Every week someone on YouTube declares a field dead, then another person says it’s the future. It’s exhausting.",

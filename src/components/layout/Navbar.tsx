@@ -16,7 +16,7 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-600 dark:text-neutral-400">
-          {['Experience', 'Projects', 'Tech Stack', 'Blog'].map((item) => (
+          {['Experience', 'Projects', 'Tech Stack', 'Blog', 'Contact'].map((item) => (
             <Link key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors">
               {item}
             </Link>

@@ -4,7 +4,6 @@ export interface BlogPost {
     subtitle: string;
     date: string;
     readTime: string;
-    claps: number;
     tags: string[];
     coverImage?: string;
     content: string[];
@@ -17,7 +16,6 @@ export const BLOG_POSTS: BlogPost[] = [
         subtitle: "Web development is not dead. But the easy version of it probably is.",
         date: "Jun 3, 2026",
         readTime: "5 min read",
-        claps: 0,
         tags: ["Web Development", "Career", "AI", "Software Engineering"],
         coverImage: "/images/profile.png",
         content: [
@@ -28,7 +26,7 @@ export const BLOG_POSTS: BlogPost[] = [
             "I think the answer is yes. But not in the same way it was a few years ago.",
             "Web development is still alive. The path is not. People love saying “webdev is dead” because AI can generate websites now.",
             "Okay. Sure. AI can also generate terrible codebases filled with random dependencies, broken logic, fake security, and enough hallucinated code to create future architectural nightmares.",
-            "What companies actually need in 2026 are software architects and engineers who understand systems, database boundaries, clean architecture, and how to glue complex distributed infrastructure together."
+            "What companies actually need in 2026 are software architects and engineers who understand systems, database boundaries, clean architecture, and how to glue complex distributed infrastructure together.",
         ],
     },
 ];

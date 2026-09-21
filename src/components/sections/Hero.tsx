@@ -30,7 +30,8 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-5xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-white"
           >
-            Hi, I&apos;m {PORTFOLIO_DATA.personal.name.split(" ")[0]}.<br />pnpm lint
+            Hi, I&apos;m {PORTFOLIO_DATA.personal.name.split(" ")[0]}.<br />
+            pnpm lint
             <span className="text-neutral-500 dark:text-neutral-400">
               {PORTFOLIO_DATA.personal.role}
             </span>
@@ -63,7 +64,8 @@ export function Hero() {
                 href={PORTFOLIO_DATA.personal.links.github}
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
+                aria-label="GitHub profile"
+                className="p-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-600 rounded-lg transition-colors"
               >
                 {/* GitHub Native SVG */}
                 <svg
@@ -78,7 +80,8 @@ export function Hero() {
                 href={PORTFOLIO_DATA.personal.links.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
+                aria-label="LinkedIn profile"
+                className="p-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-600 rounded-lg transition-colors"
               >
                 {/* LinkedIn Native SVG */}
                 <svg
@@ -91,7 +94,8 @@ export function Hero() {
               </a>
               <a
                 href={`mailto:${PORTFOLIO_DATA.personal.email}`}
-                className="p-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
+                aria-label="Send email"
+                className="p-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-600 rounded-lg transition-colors"
               >
                 <Mail className="h-5 w-5" />
               </a>

@@ -4,7 +4,7 @@ const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN,
 });
 
-const USERNAME = process.env.GITHUB_USERNAME || 'ozaycank';
+const USERNAME = process.env.GITHUB_USERNAME || "ozaycank";
 
 interface GithubRepoResponse {
     id: number;
@@ -14,9 +14,9 @@ interface GithubRepoResponse {
     html_url: string;
     homepage: string | null;
     stargazers_count: number;
-    topics?: string[];
     created_at: string | null;
     fork: boolean;
+    default_branch: string;
 }
 
 export interface GithubProject {
@@ -32,41 +32,114 @@ export interface GithubProject {
     createdAt: string;
 }
 
-// SADECE GÖRÜNMESİNİ İSTEDİĞİN 5 ÖZEL REPO
-const ALLOWED_OLD_REPOS: readonly string[] = [
-    "Velyo",
-    "ogretmen-busra",
-    "fanX",
-    "ozaycank.dev",
-    "pomodoro",
+interface FeaturedProjectConfig {
+    name: string;
+    description: string;
+    topics: readonly string[];
+}
+
+const FEATURED_PROJECTS: readonly FeaturedProjectConfig[] = [
+    {
+        name: "Velyo",
+        description:
+            "A multi-tenant Agile workspace combining project management, documentation, real-time collaboration, analytics, and role-based access.",
+        topics: [
+            ".NET 8",
+            "Next.js",
+            "PostgreSQL",
+            "SignalR",
+            "CQRS",
+            "Clean Architecture",
+        ],
+    },
+    {
+        name: "ogretmen-busra",
+        description:
+            "A serverless education platform for publishing, moderating, and securely distributing classroom materials with object storage and edge rate limiting.",
+        topics: [
+            "Next.js",
+            "TypeScript",
+            "PostgreSQL",
+            "Prisma",
+            "Cloudflare R2",
+            "Upstash Redis",
+        ],
+    },
+    {
+        name: "fanX",
+        description:
+            "A full-stack sports social platform with feeds, voting, direct messaging, moderation, and visibility-aware polling to reduce unnecessary network requests.",
+        topics: [
+            "React",
+            "Node.js",
+            "PostgreSQL",
+            "Prisma",
+            "Zustand",
+            "JWT",
+        ],
+    },
 ];
 
-// BUGÜNDEN (29 Temmuz 2026) SONRA AÇILAN YENİ REPOLAR OTOMATİK EKLENİR
-const AUTO_ACCEPT_DATE = new Date("2026-07-29T00:00:00Z");
+const FEATURED_PROJECT_MAP = new Map<
+    string,
+    FeaturedProjectConfig & { order: number }
+>(
+    FEATURED_PROJECTS.map((project, order) => [
+        project.name,
+        {
+            ...project,
+            order,
+        },
+    ])
+);
 
-function extractFirstImage(markdownContent: string | null, repoFullName: string): string | null {
+function extractFirstImage(
+    markdownContent: string | null,
+    repoFullName: string,
+    defaultBranch: string
+): string | null {
     if (!markdownContent) return null;
 
     const markdownImageRegex = /!\[.*?\]\((.*?)\)/;
-    const htmlImageRegex = /<img.*?src="(.*?)".*?>/;
+    const htmlImageRegex = /<img.*?src=["'](.*?)["'].*?>/i;
 
     const markdownMatch = markdownContent.match(markdownImageRegex);
-    if (markdownMatch && markdownMatch[1]) {
-        return normalizeImageUrl(markdownMatch[1], repoFullName);
+
+    if (markdownMatch?.[1]) {
+        return normalizeImageUrl(
+            markdownMatch[1],
+            repoFullName,
+            defaultBranch
+        );
     }
 
     const htmlMatch = markdownContent.match(htmlImageRegex);
-    if (htmlMatch && htmlMatch[1]) {
-        return normalizeImageUrl(htmlMatch[1], repoFullName);
+
+    if (htmlMatch?.[1]) {
+        return normalizeImageUrl(
+            htmlMatch[1],
+            repoFullName,
+            defaultBranch
+        );
     }
 
     return null;
 }
 
-function normalizeImageUrl(url: string, repoFullName: string): string {
-    if (url.startsWith('http')) return url;
-    const cleanUrl = url.startsWith('/') ? url.substring(1) : url;
-    return `https://raw.githubusercontent.com/${repoFullName}/main/${cleanUrl}`;
+function normalizeImageUrl(
+    url: string,
+    repoFullName: string,
+    defaultBranch: string
+): string {
+    if (/^https?:\/\//i.test(url)) {
+        return url;
+    }
+
+    const cleanUrl = url
+        .replace(/\\/g, "/")
+        .replace(/^\.?\//, "");
+
+    return `https://raw.githubusercontent.com/${repoFullName}/${defaultBranch}/${cleanUrl}`;
 }
 
 export async function fetchGithubProjects(): Promise<GithubProject[]> {
@@ -78,15 +151,15 @@ export async function fetchGithubProjects(): Promise<GithubProject[]> {
             type: "owner",
         });
 
-        // Filtre: Sadece 5 beyaz listeli repo VEYA bugünden sonra oluşturulanlar
-        const filteredRepos = (repos as GithubRepoResponse[]).filter((repo) => {
-            if (repo.fork) return false;
-
-            const repoDate = repo.created_at ? new Date(repo.created_at) : new Date(0);
-            return ALLOWED_OLD_REPOS.includes(repo.name) || repoDate > AUTO_ACCEPT_DATE;
-        });
+        const filteredRepos = (repos as GithubRepoResponse[]).filter(
+            (repo) =>
+                !repo.fork &&
+                FEATURED_PROJECT_MAP.has(repo.name)
+        );
 
         const projectPromises = filteredRepos.map(async (repo) => {
+            const projectConfig = FEATURED_PROJECT_MAP.get(repo.name)!;
+
             let coverImage: string | null = null;
 
             try {
@@ -99,26 +172,43 @@ export async function fetchGithubProjects(): Promise<GithubProject[]> {
                 });
 
                 const readmeContent = readme as unknown as string;
-                coverImage = extractFirstImage(readmeContent, repo.full_name);
+
+                coverImage = extractFirstImage(
+                    readmeContent,
+                    repo.full_name,
+                    repo.default_branch
+                );
             } catch {
-                // README bulunamazsa sessizce geç
+                // A missing README image must not prevent the project from rendering.
             }
 
             return {
                 id: repo.id,
                 name: repo.name,
                 fullName: repo.full_name,
-                description: repo.description,
+                description: projectConfig.description,
                 htmlUrl: repo.html_url,
                 homepage: repo.homepage,
                 stargazersCount: repo.stargazers_count,
-                topics: repo.topics || [],
-                coverImage: coverImage,
-                createdAt: repo.created_at || '',
+                topics: [...projectConfig.topics],
+                coverImage,
+                createdAt: repo.created_at || "",
             };
         });
 
-        return await Promise.all(projectPromises);
+        const projects = await Promise.all(projectPromises);
+
+        return projects.sort((a, b) => {
+            const aOrder =
+                FEATURED_PROJECT_MAP.get(a.name)?.order ??
+                Number.MAX_SAFE_INTEGER;
+
+            const bOrder =
+                FEATURED_PROJECT_MAP.get(b.name)?.order ??
+                Number.MAX_SAFE_INTEGER;
+
+            return aOrder - bOrder;
+        });
     } catch (error) {
         console.error("Error fetching GitHub projects:", error);
         return [];

@@ -15,11 +15,20 @@ export function Blog() {
   // Sayfa yüklendiğinde hafızadaki claps (alkış) verilerini çek
   useEffect(() => {
     const initialMap: Record<string, number> = {};
+
     BLOG_POSTS.forEach((post) => {
       const saved = localStorage.getItem(`claps_${post.slug}`);
-      initialMap[post.slug] = saved ? parseInt(saved, 10) : post.claps;
+
+      initialMap[post.slug] = saved ? Number.parseInt(saved, 10) : post.claps;
     });
-    setClapsMap(initialMap);
+
+    const frameId = window.requestAnimationFrame(() => {
+      setClapsMap(initialMap);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
   }, []);
 
   // Tıklamada alkış sayısını artır ve LocalStorage'a yaz

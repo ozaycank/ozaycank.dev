@@ -27,7 +27,7 @@ export function TechStack() {
       skills: PORTFOLIO_DATA.skills.database,
     },
     {
-      title: "Cloud & Architecture",
+      title: "Cloud & Infrastructure",
       icon: <Cloud className="h-5 w-5 text-rose-500" />,
       skills: PORTFOLIO_DATA.skills.infrastructure,
     },
@@ -36,7 +36,6 @@ export function TechStack() {
   return (
     <section id="tech-stack" className="py-24 relative">
       <div className="container mx-auto px-4 md:px-8">
-        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -48,7 +47,8 @@ export function TechStack() {
             Tech Stack.
           </h2>
           <p className="text-neutral-600 dark:text-neutral-400 text-lg max-w-2xl">
-            The core technologies, frameworks, and architectural tools I use to build production-ready systems.
+            The core technologies, frameworks, and platforms I use to build and
+            operate full-stack systems.
           </p>
         </motion.div>
 
@@ -84,7 +84,6 @@ export function TechStack() {
             </motion.div>
           ))}
         </div>
-
       </div>
     </section>
   );

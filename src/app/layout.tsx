@@ -16,49 +16,63 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ozaycank.dev"),
+
   title: {
-    default: "Özay Can Kırlı | Software Engineer & Architect",
+    default: "Özay Can Kırlı | Full-Stack Software Developer",
     template: "%s | Özay Can Kırlı",
   },
+
   description:
-    "Portfolio of Özay Can Kırlı, Software Engineer & Architect specializing in scalable full-stack solutions, modern frontend architectures, and enterprise systems.",
+    "Portfolio of Özay Can Kırlı, a full-stack software developer building modern web applications and backend systems with Next.js, React, TypeScript, .NET, and PostgreSQL.",
+
   keywords: [
     "Özay Can Kırlı",
-    "Software Engineer",
-    "Solutions Architect",
-    "Full-Stack Developer",
+    "Full-Stack Software Developer",
+    "Software Developer",
+    "Solution Architecture",
     "Next.js",
+    "React",
     "TypeScript",
     ".NET 8",
-    "React",
+    "PostgreSQL",
     "Turkey",
   ],
-  authors: [{ name: "Özay Can Kırlı", url: "https://ozaycank.dev" }],
+
+  authors: [
+    {
+      name: "Özay Can Kırlı",
+      url: "https://ozaycank.dev",
+    },
+  ],
+
   creator: "Özay Can Kırlı",
+
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://ozaycank.dev",
-    title: "Özay Can Kırlı | Software Engineer & Architect",
+    title: "Özay Can Kırlı | Full-Stack Software Developer",
     description:
-      "Explore case studies, enterprise SaaS architectures, and scalable full-stack applications built by Özay Can Kırlı.",
+      "Selected projects and professional experience across full-stack development, software architecture, and enterprise systems.",
     siteName: "Özay Can Kırlı Portfolio",
     images: [
       {
         url: "/images/profile.png",
         width: 1200,
         height: 630,
-        alt: "Özay Can Kırlı - Software Engineer & Architect",
+        alt: "Özay Can Kırlı - Full-Stack Software Developer",
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Özay Can Kırlı | Software Engineer & Architect",
+    title: "Özay Can Kırlı | Full-Stack Software Developer",
     description:
-      "Explore case studies, enterprise SaaS architectures, and scalable full-stack applications.",
+      "Selected projects and professional experience across full-stack development and software architecture.",
     images: ["/images/profile.png"],
   },
+
   robots: {
     index: true,
     follow: true,

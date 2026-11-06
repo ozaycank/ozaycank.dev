@@ -31,7 +31,6 @@ export function Hero() {
             className="text-5xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-white"
           >
             Hi, I&apos;m {PORTFOLIO_DATA.personal.name.split(" ")[0]}.<br />
-            pnpm lint
             <span className="text-neutral-500 dark:text-neutral-400">
               {PORTFOLIO_DATA.personal.role}
             </span>
